@@ -109,9 +109,9 @@ model {
   //correlations (expressed as canonical partial correlations)
   matrix[C, ncor] cpc_G = tanh(Q * B_cpcq);
   
-  //scale non-focal univariate random effects
+  //initialize mean linear predictors
   vector[N] mu_a = mu_act[id_lm];
-  vector[N] mu_e = mu_act[id_lm];
+  vector[N] mu_e = mu_explo[id_lm];
 
   //scale context-specific multivariate additive genetic effects
   matrix[cnt, D] mat_G;
@@ -131,7 +131,7 @@ model {
                   
 //likelihood 
   Act ~ normal(mu_a, 0.05);
-  Exp ~ normal(mu_a, 0.05);
+  Exp ~ normal(mu_e, 0.05);
 
 
 //priors
