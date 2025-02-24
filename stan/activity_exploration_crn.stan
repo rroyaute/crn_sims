@@ -90,6 +90,7 @@ parameters {
   //fixed effects
   vector[P_a] B_mq_a; //RN of means for activity
   vector[P_e] B_mq_e; //RN of means for exploration
+  // matrix[P_y, D] B_vq; //RN of variances
   matrix[P_y, ncor] B_cpcq; //RN of canonical partial correlations
 
   //random effects
@@ -100,12 +101,15 @@ parameters {
 
 model {
   //predicted values from reaction norms
-  //growth
+  //Activity
   vector[N] mu_act =  Q_a * B_mq_a;
   
-  //fecundity
+  //Exploration
   vector[N] mu_explo =  Q_e * B_mq_e;
-                       
+
+  //variances
+  // matrix[C, D] sd_G = sqrt(exp(Q * B_vq));
+  
   //correlations (expressed as canonical partial correlations)
   matrix[C, ncor] cpc_G = tanh(Q * B_cpcq);
   
@@ -137,9 +141,10 @@ model {
 //priors
   to_vector(B_mq_a) ~ normal(0,1);
   to_vector(B_mq_e) ~ normal(0,1);
+  // to_vector(B_vq) ~ normal(0, 1);
   to_vector(B_cpcq) ~ normal(0,1);
   to_vector(Z_G) ~ std_normal();
-
+  LA ~ lkj_corr_cholesky(2);
   
   for(c in 1:C){
   sd_G[c] ~ exponential(2);
@@ -155,6 +160,7 @@ generated quantities{
   B_m_e= R_inv_e * B_mq_e;
 
   for(d in 1:ncor){
+   //  B_v[ : , d] = R_inv * B_vq[ : , d];
     B_cpc[,d]= R_inv * B_cpcq[,d];
     }
 }
