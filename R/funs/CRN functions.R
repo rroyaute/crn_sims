@@ -11,6 +11,17 @@ library(mvtnorm)
 library(rethinking)
 library(posterior)
 
+# Function for extracting posterior draws
+extract_samples <- function(fit_obj) {
+  vars <- fit_obj$metadata()$stan_variables
+  draws <- posterior::as_draws_rvars(fit_obj$draws())
+  
+  lapply(vars, \(var_name){  
+    posterior::draws_of(draws[[var_name]], with_chains = FALSE)
+  }) |> setNames(vars)
+}
+
+
 #this function generates single measure/subject data for a
 #quantitative genetic CRN analysis using a supplied matrix 
 #of environmental predictors (continuous and/or discrete)
