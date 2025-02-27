@@ -6,8 +6,8 @@ generate_mvn <- function(row) {
   
   # Construct covariance matrix
   sigma <- matrix(
-    c(row["sigma_y1"], row["cov_12"],
-      row["cov_12"], row["sigma_y2"]),
+    c(row["sigma_y1"]^2, row["cov_12"],
+      row["cov_12"], row["sigma_y2"]^2),
     nrow = 2
   )
   
