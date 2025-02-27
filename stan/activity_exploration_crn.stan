@@ -144,7 +144,6 @@ model {
   // to_vector(B_vq) ~ normal(0, 1);
   to_vector(B_cpcq) ~ normal(0,1);
   to_vector(Z_G) ~ std_normal();
-  LA ~ lkj_corr_cholesky(2);
   
   for(c in 1:C){
   sd_G[c] ~ exponential(2);
